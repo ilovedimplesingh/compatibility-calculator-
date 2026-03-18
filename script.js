@@ -97,7 +97,7 @@ Like no matter where things start, they somehow lead back to each other.
 Out of all the possibilities, all the different paths…  
 this is the one that feels right.
 
-And out of everything that could’ve been…  
+And out of everything that could’ve been….  
 this is the one that feels right to hold onto.
 
 Not just by chance… but by choice. ❤️
