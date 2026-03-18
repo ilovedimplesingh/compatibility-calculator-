@@ -48,3 +48,8 @@ button:hover {
   margin: 10px 0;
   color: #f472b6;
 }
+
+#message {
+  white-space: pre-line;
+  line-height: 1.6;
+}
