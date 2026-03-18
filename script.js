@@ -25,7 +25,6 @@ if (resultBox) {
   const data = JSON.parse(localStorage.getItem("loveData"));
 
   let progressText = document.getElementById("loading");
-  let title = document.getElementById("title");
 
   let steps = [
     "Aligning planets...",
@@ -56,52 +55,77 @@ function showResult(data) {
   const YOUR_DOB = "2003-10-21";
   const HER_DOB = "2007-09-08";
 
-  // check closeness (±3 days)
-  function isClose(date1, date2) {
+  function daysBetween(date1, date2) {
     const d1 = new Date(date1);
     const d2 = new Date(date2);
-
-    const diff = Math.abs(d1 - d2);
-    const days = diff / (1000 * 60 * 60 * 24);
-
-    return days <= 3;
+    return Math.abs((d1 - d2) / (1000 * 60 * 60 * 24));
   }
 
-  // exact match (any order)
+  function isClose(date1, date2) {
+    return daysBetween(date1, date2) <= 3;
+  }
+
+  // EXACT MATCH (any order)
   const exactMatch =
     (data.dob1 === YOUR_DOB && data.dob2 === HER_DOB) ||
     (data.dob1 === HER_DOB && data.dob2 === YOUR_DOB);
 
-  // close match (small mistake)
-  const closeMatch =
-    (isClose(data.dob1, YOUR_DOB) && isClose(data.dob2, HER_DOB)) ||
-    (isClose(data.dob1, HER_DOB) && isClose(data.dob2, YOUR_DOB));
+  // CLOSE MATCH (if ANY one is close)
+  const oneCloseToYou =
+    isClose(data.dob1, YOUR_DOB) || isClose(data.dob2, YOUR_DOB);
 
-  let score, message, title;
+  const oneCloseToHer =
+    isClose(data.dob1, HER_DOB) || isClose(data.dob2, HER_DOB);
+
+  const closeMatch = oneCloseToYou || oneCloseToHer;
+
+  let targetScore, message, title;
 
   if (exactMatch) {
-    score = "100% Compatibility ❤️";
+    targetScore = 100;
     title = "Perfect Alignment";
-    message = `${data.name1} & ${data.name2}, this connection feels rare... almost like it was meant to happen.`;
+    message = `${data.name1} & ${data.name2}…  
+    This connection feels rare… almost like it was meant to happen.`;
   } 
   else if (closeMatch) {
-    score = "Calculation Error ⚠️";
-    title = "Data Mismatch";
-    message = "Something feels slightly off... please recheck the birth details carefully.";
+    targetScore = 75;
+    title = "Data Mismatch ⚠️";
+    message = "Something feels slightly off… please recheck the birth details carefully.";
   } 
   else {
-    score = "Not Compatible ❌";
-    title = "Mismatch Detected";
-    message = "This connection may not be as strong as it seems. Something feels missing.";
+    targetScore = 45;
+    title = "Not Compatible ❌";
+    message = "This person may not be the right match for you.";
   }
 
-  document.getElementById("score").innerText = score;
   document.getElementById("title").innerText = title;
   document.getElementById("message").innerText = message;
+
+  animateScore(targetScore);
 }
 
 
-// ================== SECRET BUTTON ==================
+// ================== ANIMATION ==================
+function animateScore(target) {
+  let current = 0;
+  const scoreEl = document.getElementById("score");
+
+  let interval = setInterval(() => {
+    current += 1;
+    scoreEl.innerText = current + "%";
+
+    if (current >= target) {
+      clearInterval(interval);
+
+      if (target === 100) {
+        scoreEl.innerText = "100% ❤️";
+      }
+    }
+  }, 20);
+}
+
+
+// ================== SECRET ==================
 function showSecret() {
   document.getElementById("secret").classList.remove("hidden");
 }
