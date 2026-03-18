@@ -55,6 +55,26 @@ function showResult(data) {
   const YOUR_DOB = "2003-10-21";
   const HER_DOB = "2007-09-08";
 
+  const YOUR_NAME = "mehul";
+  const HER_NAME = "dimple";
+
+  // normalize names
+  const name1 = data.name1.trim().toLowerCase();
+  const name2 = data.name2.trim().toLowerCase();
+
+  // name match (any order)
+  const nameMatch =
+    (name1 === YOUR_NAME && name2 === HER_NAME) ||
+    (name1 === HER_NAME && name2 === YOUR_NAME);
+
+  // dob match (any order)
+  const dobMatch =
+    (data.dob1 === YOUR_DOB && data.dob2 === HER_DOB) ||
+    (data.dob1 === HER_DOB && data.dob2 === YOUR_DOB);
+
+  const exactMatch = nameMatch && dobMatch;
+
+  // helper for close dates
   function daysBetween(date1, date2) {
     const d1 = new Date(date1);
     const d2 = new Date(date2);
@@ -65,26 +85,22 @@ function showResult(data) {
     return daysBetween(date1, date2) <= 3;
   }
 
-  // EXACT MATCH (any order)
-  const exactMatch =
-    (data.dob1 === YOUR_DOB && data.dob2 === HER_DOB) ||
-    (data.dob1 === HER_DOB && data.dob2 === YOUR_DOB);
-
-  // CLOSE MATCH (if ANY one is close)
-  const oneCloseToYou =
-    isClose(data.dob1, YOUR_DOB) || isClose(data.dob2, YOUR_DOB);
-
-  const oneCloseToHer =
-    isClose(data.dob1, HER_DOB) || isClose(data.dob2, HER_DOB);
-
-  const closeMatch = oneCloseToYou || oneCloseToHer;
+  // only check "close" if names are correct
+  const closeMatch =
+    nameMatch &&
+    (
+      isClose(data.dob1, YOUR_DOB) ||
+      isClose(data.dob2, YOUR_DOB) ||
+      isClose(data.dob1, HER_DOB) ||
+      isClose(data.dob2, HER_DOB)
+    );
 
   let targetScore, message, title;
 
   if (exactMatch) {
     targetScore = 100;
     title = "Perfect Alignment";
-   message = `${data.name1} & ${data.name2}…
+    message = `${data.name1} & ${data.name2}…
 
 This connection feels rare… almost like it was meant to happen.
 
@@ -111,7 +127,7 @@ Not just fate… something worth choosing, again and again. ❤️`;
   else {
     targetScore = 45;
     title = "Not Compatible ❌";
-    message = "This person may not be the right match for you.";
+    message = "This match doesn’t align. Something important is missing here.";
   }
 
   document.getElementById("title").innerText = title;
