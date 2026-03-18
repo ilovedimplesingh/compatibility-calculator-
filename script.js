@@ -84,8 +84,24 @@ function showResult(data) {
   if (exactMatch) {
     targetScore = 100;
     title = "Perfect Alignment";
-    message = `${data.name1} & ${data.name2}…  
-    This connection feels rare… almost like it was meant to happen.`;
+   message = `${data.name1} & ${data.name2}…
+
+This connection feels rare… almost like it was meant to happen.
+
+Not because everything is perfect,  
+but because something about it just makes sense.
+
+There’s a kind of pull here — quiet, natural, undeniable.  
+Like no matter where things start, they somehow lead back to each other.
+
+Out of all the possibilities, all the different paths…  
+this is the one that feels right.
+
+And out of everything that could’ve been…  
+this is the one that feels right to hold onto.
+
+Not just by chance… but by choice. ❤️
+Not just fate… something worth choosing, again and again. ❤️`;
   } 
   else if (closeMatch) {
     targetScore = 75;
